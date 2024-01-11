@@ -1,4 +1,6 @@
-Repositori ini merupakan proyek yang sedang dalam tahap pengembangan aktif dan belum sepenuhnya lengkap. Tujuan utama dari proyek ini adalah untuk memberikan prediksi volatilitas dalam pasar cryptocurrency. Platform ini dapat diakses melalui https://octavvia-crypto-pred.streamlit.app/.
+Repositori ini merupakan proyek yang sedang dalam tahap pengembangan aktif dan belum sepenuhnya lengkap. Tujuan utama dari proyek ini adalah untuk memberikan prediksi volatilitas dalam pasar cryptocurrency. Platform ini dapat diakses melalui 
+
+https://octavvia-crypto-pred.streamlit.app/.
 
 Proses prediksi volatilitas dalam crypto dilakukan dengan menggunakan algoritma grach. Meskipun proyek ini masih dalam tahap pengembangan, tim pengembang sedang bekerja keras untuk menyempurnakan dan meningkatkan fungsionalitasnya.
 
