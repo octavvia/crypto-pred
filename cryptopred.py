@@ -77,21 +77,6 @@ df = df.drop(['Dividends', 'Stock Splits'], axis=1)
 # Change context to poster to increase font sizes
 sns.set_context("talk", font_scale=1.3)
 
-# # Plot the closing price
-# with sns.axes_style("darkgrid"):
-#     fig, ax = plt.subplots(figsize=(16,8))
-#     sns.lineplot(x=df.index, y=df.Close, color='blue')
-#     ax.set_title('BTC-USD Daily Closing Price')
-
-# plt.tight_layout()
-# plt.savefig(os.path.join('close.png'),
-#             dpi=300, bbox_inches='tight')
-
-# plt.rcParams["figure.figsize"] = 15, 8
-# fig, axes = plt.subplots(1, 2, sharex=True)
-# sgt.plot_acf(df.Close, ax=axes[0],zero=False,lags=50);
-# sgt.plot_pacf(df.Close, ax=axes[1],zero=False,lags=50);
-
 #Perform Dickey-Fuller test:
 print ('Results of Augmented Dickey-Fuller Test:')
 dftest = adfuller(df.Close, autolag='AIC')
@@ -104,14 +89,6 @@ def test_stationarity(timeseries):
     #determine rolling statistics
     rolmean = pd.Series(timeseries).rolling(window=24).mean()#24 hours on each day
     rolstd = pd.Series(timeseries).rolling(window=24).std()
-    # #plot rolling statistics
-    # orig = plt.plot(timeseries,color = 'blue',label='original')
-    # mean = plt.plot(rolmean,color = 'red',label = 'rolling mean')
-    # std = plt.plot(rolstd,color = 'black',label = 'rolling std')
-    # plt.legend(loc = 'best')
-    # plt.title('Rolling mean and standard deviation of Bitcoin Return')
-    # plt.show(block = False)
-    #perform dickey fuller test
     print('result of dickey fuller test:')
     dftest = adfuller(timeseries,autolag = 'AIC')
     dfoutput = pd.Series(dftest[0:4],index = ['Test statistics', 'p-value', '#lags used', 'number of observation used'])
@@ -132,48 +109,9 @@ df.dropna(inplace=True)
 df['Sq_Returns']=df.returns.mul(df.returns)
 df.head()
 
-# with sns.axes_style("darkgrid"):
-#     fig, axes = plt.subplots(nrows=2, ncols=2, figsize=(18,12))
-
-#     axes[0][0].plot(df.returns, color='blue')
-#     axes[0][0].set_title('Returns')
-
-#     sns.distplot(df.returns, norm_hist=True, fit=stats.norm, color='blue',
-#                 bins=50, ax=axes[0][1])
-#     axes[0][1].set_title('Histogram of returns')
-
-#     axes[1][0].plot(df.log_returns, color='green')
-#     axes[1][0].set_title('Log Returns')
-
-#     sns.distplot(df.log_returns, norm_hist=True, fit=stats.norm, color='green',
-#                 bins=50, ax=axes[1][1])
-#     axes[1][1].set_title('Histogram of log returns')
-#     plt.tight_layout()
-#     plt.savefig(os.path.join( 'returns_logreturns.png'),
-#                 dpi=300, bbox_inches='tight')
-#     fig.show();
-
-
 df.returns.describe()
 df.log_returns.describe()
 
-# #Plot the Daily Returns
-# plt.figure(figsize=(16, 16))
-# plt.subplot(211)
-# df['returns'].plot(label='Returns')
-# plt.title('Bitcoin Daily Returns data')
-# plt.legend()
-# #Plot the Daily Squared Returns
-# plt.subplot(212)
-# plt.subplot(212, facecolor="lightgrey")
-# df['Sq_Returns'].plot(label='Squared Returns')
-# plt.title('Volatility of Daily Returns Bitcoin',color="red",fontsize=18,ha='center')
-# plt.legend()
-# # Tweak spacing between subplots to prevent labels from overlapping
-# plt.subplots_adjust(hspace=0.5)
-# plt.show()
-
-#rcParams['figure.figsize'] = 15,10
 df['returns'].dropna(inplace=True)
 test_stationarity(df['returns'])
 
@@ -212,28 +150,10 @@ r_train.describe()
 
 r_train.describe()
 
-# r_train
-
-# r_test
-
-#Train and test split
-#Splitting the dataset into 90% training set and 10% Test set
 print(data_return.shape)
 train = data_return.iloc[:-182]
 test = data_return.iloc[-182:]
 print(train.shape,test.shape)
-
-# test
-
-# plt.figure(figsize=(16,8))
-# plt.grid(True)
-# plt.xlabel('Date')
-# plt.ylabel('returns')
-# plt.plot(train['returns'], 'blue', label='Train return')
-# plt.plot(test['returns'], 'orange', label='Test return')
-# plt.vlines(x=[datetime(2021, 5, 20)], ymin=-40, ymax=30, color='r', label='test line')
-# plt.text(datetime(2021, 5, 20), 0.488787, 'Split Return', ha='center', va='center',rotation='vertical')
-# plt.legend()
 
 def hurst(ts):
     """Returns the Hurst Exponent of the time series vector ts"""
@@ -269,22 +189,6 @@ def plot_correlogram(x, lags=None, title=None):
     fig.suptitle(title, fontsize=20)
     fig.tight_layout()
     fig.subplots_adjust(top=0.9,hspace=1.5)
-
-# # Plot ACF, PACF and Q-Q plot and get ADF p-value of series
-# plot_correlogram(df['returns'], lags=100, title='BTC-USD (Log, Diff)')
-
-# plot_correlogram(df.log_returns.sub(df.log_returns.mean()).pow(2), lags=100, title='BTC-USD Daily Volatility')
-
-# # Visualize autocorrelation of squared returns
-# plot_acf(r_train**2,
-#           title=f'{tckr.upper()} Returns Autocorrelation',zero=False);
-
-
-# # Visualize partial autocorrelation of squared returns
-# plot_pacf(r_train**2,
-#           title=f'{tckr.upper()} Returns Partial AutoCorrelation',zero=False);
-
-
 
 # Set seed for reproducibility
 np.random.seed(seed)
@@ -335,21 +239,6 @@ def scale_tf_cond_vol(model_result):
 # Get volatility scaler & scaled conditional volatility from model result
 scaler_garch, scaled_cond_vol = scale_tf_cond_vol(result_1)
 
-
-# Visualize model's estimated conditional volatility with scaled vol_current calculated above
-# def viz_cond_vol(cond_vol_series, model_name):
-#     with sns.axes_style("darkgrid"):
-#         fig, ax = plt.subplots(figsize=(18,7))
-
-#         ax.plot(r_train, color='blue', lw=2,
-#                 label=f'Scaled Interval Daily Return')
-#         ax.plot(cond_vol_series, color='orange', lw=2,
-#                 label=f'Scaled {model_name} Estimated Conditional Volatility')
-#         ax.set_title('Training Set')
-#         plt.legend()
-        # plt.show();
-
-
 n_future = 182
 # viz_cond_vol(scaled_cond_vol, 'GARCH(1,1)')
 
@@ -382,31 +271,6 @@ gm_1_preds = pd.Series(rolling_forecasts, index=test_idx)
 
 # Transform predictions using fitted scaler
 gm_1_preds_scaled = transform_volatility_to_scaler(scaler_garch, gm_1_preds)
-
-# Plotting model predictions vs. target values
-# def viz_model(y_true, y_pred, model_name):
-#     sns.set_context("paper", font_scale=1.7)
-#     plt.rcParams["axes.grid"] = False
-
-#     with sns.axes_style("whitegrid"):
-#         plt.figure(figsize=(18,7))
-#         plt.plot(r_train, color='gray',  ls=':',
-#                 label=f"Scaled Current Daily Return")
-
-#         plt.plot(y_true, color='orange', lw=2,
-#                 label=f"Target Retrun")
-#         plt.plot(y_pred, color='blue', lw=8.5,
-#                 label=f'Forecasted Return')
-
-#         # plt.plot(lr_val, color='gray', alpha=0.4,
-#         #         label='Daily Log Returns')
-
-#         plt.title(f'{model_name} \non Validation Data')
-#         plt.legend(loc='best', frameon=True)
-
-# # Plotting predictions vs. target values on validation set
-# viz_model(r_test, gm_1_preds_scaled,
-#           'Analytical Forecasting GARCH(1,1) Constant Mean Normal Distribution')
 
 # Define root mean squared percentage error function
 def RMSPE(y_true, y_pred):
@@ -444,13 +308,6 @@ gm_std = result_1.conditional_volatility
 
 # Standardizing residuals
 gm_std_resid = gm_resid / gm_std
-
-# Visualizing standardized residuals vs. a normal distribution
-# with sns.axes_style("darkgrid"):
-#     plt.figure(figsize=(10,6))
-#     sns.distplot(gm_std_resid, norm_hist=True, fit=stats.norm, bins=50)
-#     plt.legend(('Normal Distribution', 'Standardized Residuals'))
-    # plt.show();
 
 # Set seed for reproducibility
 np.random.seed(seed)
@@ -493,10 +350,6 @@ gjr_1_preds = pd.DataFrame(rolling_forecasts, index=test_idx)
 # Transform predictions using fitted scaler
 gjr_1_preds_scaled = transform_volatility_to_scaler(scaler_gjr, gjr_1_preds)
 
-# Plotting predictions vs. target values on validation set
-# viz_model(r_test, gjr_1_preds_scaled,
-#           "Analytical Forecasting GJR-GARCH(1,1,1) with Constant Mean Skewed Student's T Distribution")
-
 # Append metrics outputs to perf_df dataframe
 log_perf(r_test, gjr_1_preds_scaled,
          "Analytical GJR-GARCH(1,1,1), Constant Mean, Skewt Dist")
@@ -513,15 +366,6 @@ for i in range(test_size):
 
 
 rolling_predictions = pd.Series(rolling_predictions, index=data_return["returns"].index[-182:])
-
-# plt.figure(figsize=(14,8))
-# true, = plt.plot(data_return.returns[-182:],color = 'blue')
-# preds, = plt.plot(rolling_predictions,color = 'orange')
-# plt.title('Volatility Prediction - Rolling Forecast BTC-USD', fontsize=20)
-# plt.legend(['Test Returns', 'GARCH(1,1)'], loc='upper left', fontsize=10)
-# plt.xlabel('Time')
-# plt.ylabel('Actual return')
-# plt.show()
 
 # report performance
 from sklearn.metrics import mean_squared_error, mean_absolute_error
